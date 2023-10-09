@@ -38,6 +38,8 @@
               },
               body: packet,
             });
+
+            progress.textContent = Math.round((i * 100) / packetsNumber, 0);
           }
         };
 
