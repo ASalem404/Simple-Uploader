@@ -5,7 +5,7 @@ const httpServer = http.createServer();
 httpServer.on("listening", () => console.log("listening..."));
 httpServer.on("request", (req, res) => {
   if (req.url === "/") {
-    fs.readFileSync("index.html");
+    res.end(fs.readFileSync("index.html"));
     return;
   }
 
@@ -14,10 +14,9 @@ httpServer.on("request", (req, res) => {
 
     req.on("data", (data) => {
       fs.appendFileSync(fileName, data);
-      console.log("received data: " + data.length);
     });
     res.end("Uploaded");
   }
 });
 
-httpServer.listen(3300);
+httpServer.listen(4000);
