@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Uploader♋</title>
+  </head>
+  <body>
+    <h1>FILE UPLOADER</h1>
+
+    File: <input type="file" name="file" id="file" />
+    <button type="Upload" name="upload" id="uploadBtn"></button>
+    <div id="progress"></div>
+    <script>
+      const uploadBtn = document.getElementById("uploadBtn");
+      const progress = document.getElementById("progress");
+      const file = document.getElementById("file");
+
+      uploadBtn.addEventListener("click", () => {
+        const fileReader = new FileReader();
+        const theFile = file.files[0];
+
+        fileReader.onload = async (ev) => {
+          const PACKET_SIZE = 1024;
+          const packetsNumber = ev.target.result.byteLength / PACKET_SIZE;
+          const fileName = Math.random() * 1000 + theFile.name;
+          for (let i = 0; i <= packetsNumber; i++) {
+            const packet = ev.target.result.slice(
+              i * PACKET_SIZE,
+              i * PACKET_SIZE + PACKET_SIZE
+            );
+            await fetch("http://localhost:3300/upload", {
+              method: "POST",
+              headers: {
+                "content-type": "application/octet-stream",
+                "content-length": packet.length,
+                "file-name": fileName,
+              },
+              body: packet,
+            });
+          }
+        };
+
+        fileReade.readAsArrayBuffer(theFile);
+      });
+    </script>
+  </body>
+</html>
